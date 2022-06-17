@@ -1,0 +1,16 @@
+{
+  "compilerOptions": {
+    "noImplicitAny": true,      //nie dopuszcza niejawnie any
+    "preserveConstEnums": true, //żeby działały enumy w JS
+    "sourceMap": true,          //pozwala wiedzieć w którym miejscu typescript jest bład
+    "target": "ES6",
+    "downlevelIteration": true, //iterowanie po różnych rzeczach, które nie są tablicami
+    "module": "CommonJS",       //system modułów rozpoznawanych przez node
+    "lib": ["es6"],
+    "outDir": "dist",           //ustawienie folderu dist na produkcyjną wersje aplikacji
+    "experimentalDecorators": true, //do dekoratorów
+    "emitDecoratorMetadata": true,  //do dekoratorów
+    "moduleResolution": "Node",     //info, ze moduły mają być rozwiązanie w taki sposób jak w node
+    "esModuleInterop": true,        //pozwala na te lepsze importy
+  }
+}
