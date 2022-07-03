@@ -10,9 +10,9 @@ export class PatientRecord implements Patient {
     id?: string;
     login: string;
     password: string;
+    mail: string;
     name: string;
     lastName: string;
-    age: number;
     address: string;
     visitId?: string;
 
@@ -32,11 +32,11 @@ export class PatientRecord implements Patient {
 
 
         this.id = obj.id;
-        this.name = obj.name;
         this.login = obj.login;
         this.password = obj.password;
+        this.mail = obj.mail;
+        this.name = obj.name;
         this.lastName = obj.lastName;
-        this.age = obj.age;
         this.address = obj.address;
         this.visitId = obj.visitId;
 
@@ -44,7 +44,7 @@ export class PatientRecord implements Patient {
 
 
     static async getOne(id: string): Promise<Patient | null> {
-        const [results] = await pool.execute("SELECT * FROM `patient` WHERE id = :id", {
+        const [results] = await pool.execute("SELECT * FROM `patients` WHERE id = :id", {
             id,
         }) as AdRecordResults
 
@@ -53,17 +53,24 @@ export class PatientRecord implements Patient {
         return results.length === 0 ? null : new PatientRecord(results[0])
     }
 
+
+    static async getAll(): Promise<Patient[]> {
+        const [results] = await pool.execute("SELECT * FROM `patients`") as AdRecordResults
+
+        return results.map(obj => new PatientRecord(obj));
+    }
+
     async insert(): Promise<void> {
         if (!this.id) {
             this.id = uuid();
         }
-        await pool.execute("INSERT INTO `patients`(`id`, `login`,`password`, `name`, `lastName`, `age`, `address`) VALUES(:id, :login, :password, :name, :lastName, :age, :address)", {
+        await pool.execute("INSERT INTO `patients`(`id`, `login`,`password`, `mail`, `name`, `lastName`, `address`) VALUES(:id, :login, :password, :mail, :name, :lastName, :address)", {
             id: this.id,
             login: this.login,
             password: this.password,
+            mail: this.mail,
             name: this.name,
             lastName: this.lastName,
-            age: this.age,
             address: this.address,
         });
     }

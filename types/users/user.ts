@@ -2,9 +2,9 @@ export interface User {
     id?: string;
     login: string;
     password: string;
+    mail: string;
     name: string;
     lastName: string;
-    age: number;
     address: string;
     visitId?: string;
 }
