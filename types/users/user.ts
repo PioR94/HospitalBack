@@ -6,7 +6,6 @@ export interface User {
     name: string;
     lastName: string;
     address: string;
-    visitId?: string;
 }
 
 export interface Doctor extends User {
