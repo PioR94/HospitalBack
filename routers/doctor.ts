@@ -86,7 +86,5 @@ export const doctorRouter = Router();
                 login: doctor.login,
             })
 
-            console.log(doctor);
-
 
         })

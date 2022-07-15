@@ -31,8 +31,6 @@ patientRouter
                specialization: one.specialization
            }
            )
-
-
         );
 
        res.json(dataDoctor)

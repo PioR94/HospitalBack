@@ -17,18 +17,18 @@ export class PatientRecord implements Patient {
 
 
     constructor (obj: Patient) {
-        // if (obj.name.length < 3 || obj.name.length > 25) {
-        //     throw new ValidationError('Imie musi zawierać się między 3 a 25 znaków')
-        // }
-        // if (obj.lastName.length < 3 || obj.lastName.length > 36) {
-        //     throw new ValidationError('Nazwisko musi zawierać się między 3 a 36 znaków')
-        // }
-        // if (obj.address.length < 3 || obj.address.length > 50) {
-        //     throw new ValidationError('Adres musi zawierać się między 3 a 50 znaków')
-        // }
-        // if (obj.password.length < 8 || obj.lastName.length > 50) {
-        //     throw new ValidationError('Hasło musi zawierać się między 8 a 50 znaków')
-        // }
+        if (obj.name.length < 3 || obj.name.length > 25) {
+            throw new ValidationError('Imie musi zawierać się między 3 a 25 znaków')
+        }
+        if (obj.lastName.length < 3 || obj.lastName.length > 36) {
+            throw new ValidationError('Nazwisko musi zawierać się między 3 a 36 znaków')
+        }
+        if (obj.address.length < 3 || obj.address.length > 50) {
+            throw new ValidationError('Adres musi zawierać się między 3 a 50 znaków')
+        }
+        if (obj.password.length < 8 || obj.lastName.length > 50) {
+            throw new ValidationError('Hasło musi zawierać się między 8 a 50 znaków')
+        }
 
 
         this.id = obj.id;
