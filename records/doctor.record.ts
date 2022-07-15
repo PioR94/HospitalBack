@@ -15,7 +15,6 @@ export class DoctorRecord implements Doctor {
     lastName: string;
     address: string;
     specialization: string;
-    visitId?: string;
 
     constructor (obj: Doctor) {
         if (obj.name.length < 3 || obj.name.length > 25) {
@@ -31,7 +30,7 @@ export class DoctorRecord implements Doctor {
             throw new ValidationError('Hasło musi zawierać się między 8 a 50 znaków')
         }
         if (obj.specialization.length > 25) {
-            throw new ValidationError('błąd');
+            throw new ValidationError('Nazwa nie może przekraczać 25 znaków');
         }
 
 
@@ -45,7 +44,7 @@ export class DoctorRecord implements Doctor {
         this.lastName = obj.lastName;
         this.address = obj.address;
         this.specialization = obj.specialization;
-        this.visitId = obj.visitId;
+
 
     }
 
@@ -80,6 +79,13 @@ export class DoctorRecord implements Doctor {
             address: this.address,
             specialization: this.specialization,
         });
+    }
+    static async getUserLogged(login: string, password: string): Promise<Doctor | null> {
+        const [results] = await pool.execute("SELECT * FROM `doctors` WHERE login = :login AND password = :password", {
+            login,
+            password,
+        }) as AdRecordResults;
+        return results.length === 0 ? null : new DoctorRecord(results[0]);
     }
 
 
