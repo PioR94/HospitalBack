@@ -4,6 +4,7 @@ import 'express-async-errors'
 import {handleError} from "./utils/errors";
 import {doctorRouter} from "./routers/doctor";
 import {patientRouter} from "./routers/patient";
+import {visitRouter} from "./routers/visit";
 
 
 
@@ -19,7 +20,10 @@ app.use(handleError);
 
 app.use('/doctor', doctorRouter);
 app.use('/patient', patientRouter);
+app.use('/visit', visitRouter);
 
+
+const date = new Date();
 
 
 
