@@ -84,6 +84,8 @@ export const doctorRouter = Router();
                 log: true,
                 id: doctor.id,
                 login: doctor.login,
+                name: doctor.name,
+                lastName: doctor.lastName,
             })
 
 
