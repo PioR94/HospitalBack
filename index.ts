@@ -5,6 +5,7 @@ import {handleError} from "./utils/errors";
 import {doctorRouter} from "./routers/doctor";
 import {patientRouter} from "./routers/patient";
 import {visitRouter} from "./routers/visit";
+import {termRouter} from "./routers/term";
 
 
 
@@ -21,6 +22,7 @@ app.use(handleError);
 app.use('/doctor', doctorRouter);
 app.use('/patient', patientRouter);
 app.use('/visit', visitRouter);
+app.use('/term', termRouter);
 
 
 const date = new Date();

@@ -1,4 +1,5 @@
 export interface Term {
+    id: string;
     hour: string;
     dayOfWeek: string;
     numberDay: string;
