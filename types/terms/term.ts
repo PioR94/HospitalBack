@@ -4,7 +4,7 @@ export interface Term {
     dayOfWeek: string;
     numberDay: string;
     month: string;
-    year: number;
+    year: string;
     idDr: string;
     loginDr: string;
     nameDr: string;
