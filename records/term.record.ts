@@ -1,6 +1,10 @@
 import {Term} from "../types";
 import {v4 as uuid} from "uuid";
 import { pool } from "../utils/db";
+import {FieldPacket} from "mysql2";
+
+
+type AdRecordResults = [TermRecord[], FieldPacket[]]
 
 export class TermRecord implements Term {
     id: string;
@@ -8,7 +12,7 @@ export class TermRecord implements Term {
     dayOfWeek: string;
     numberDay: string;
     month: string;
-    year: number;
+    year: string;
     idDr: string;
     loginDr: string;
     nameDr: string;
@@ -28,7 +32,7 @@ export class TermRecord implements Term {
     }
 
     async insert(): Promise<void> {
-        if (!this.id) this.id = uuid();
+        // if (!this.id) this.id = uuid();
 
         await pool.execute("INSERT INTO `terms`(`id`, `hour`, `dayOfWeek`, `numberDay`, `month`, `year`, `idDr`, `loginDr`, `nameDr`, `lastNameDr`) VALUES(:id, :hour, :dayOfWeek, :numberDay, :month, :year, :idDr, :loginDr, :nameDr, :lastNameDr)", {
             id: this.id,
@@ -42,6 +46,13 @@ export class TermRecord implements Term {
             nameDr: this.nameDr,
             lastNameDr: this.lastNameDr,
         })
+    }
+
+    static async getOne(id: string): Promise<Term | null> {
+       const [results] = await pool.execute("SELECT * FROM `terms` WHERE id = :id", {
+            id,
+        }) as AdRecordResults
+        return results.length === 0 ? null : new TermRecord(results[0]);
     }
 
 

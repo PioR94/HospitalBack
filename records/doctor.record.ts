@@ -53,9 +53,6 @@ export class DoctorRecord implements Doctor {
         const [results] = await pool.execute("SELECT * FROM `doctors` WHERE id = :id", {
             id,
         }) as AdRecordResults
-
-
-
         return results.length === 0 ? null : new DoctorRecord(results[0])
     }
 
