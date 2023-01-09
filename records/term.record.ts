@@ -51,9 +51,14 @@ export class TermRecord implements Term {
     static async getOne(id: string): Promise<Term | null> {
        const [results] = await pool.execute("SELECT * FROM `terms` WHERE id = :id", {
             id,
-        }) as AdRecordResults
+        }) as AdRecordResults;
+
         return results.length === 0 ? null : new TermRecord(results[0]);
     }
 
-
+    static async delete(id: string): Promise<void> {
+        await pool.execute("DELETE FROM `terms` WHERE id = :id", {
+            id,
+        })
+    }
 }
