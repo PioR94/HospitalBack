@@ -8,10 +8,15 @@ termRouter
     .get('/', (req, res) => {
 
 })
-    .post('/add', (req, body) => {
+    .post('/add', async (req, res) => {
+
+        console.log(req.body);
+
         const term = new TermRecord(req.body)
 
-        term.insert();
+        await TermRecord.getOne(term.id) ? await TermRecord.delete(term.id) :  await term.insert();
+
+        res.end();
     })
 
 
