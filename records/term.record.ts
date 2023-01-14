@@ -63,9 +63,17 @@ export class TermRecord implements Term {
     }
 
     static async getAllIdTermByDrId(idDr: string): Promise<Term[] | null> {
-       const [results] = await pool.execute("SELECT `id`, `hour` FROM `terms` WHERE idDr = :idDr", {
+       const [results] = await pool.execute("SELECT `id` FROM `terms` WHERE idDr = :idDr", {
             idDr,
         }) as AdRecordResults;
         return results.map(obj => obj)
+    }
+
+    static async findId(id: string): Promise<boolean> {
+        const [results] = await pool.execute("SELECT `id` FROM `terms` WHERE id = :id", {
+            id,
+        }) as AdRecordResults;
+
+        return results.length !== 0;
     }
 }
