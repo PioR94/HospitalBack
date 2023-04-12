@@ -17,6 +17,7 @@ export class TermRecord implements Term {
     loginDr: string;
     nameDr: string;
     lastNameDr: string;
+    reservation?: number;
 
     constructor (obj: Term) {
         this.id = obj.id;
@@ -29,6 +30,7 @@ export class TermRecord implements Term {
         this.loginDr =obj.loginDr;
         this.nameDr = obj.nameDr;
         this.lastNameDr = obj.lastNameDr;
+        this.reservation = obj.reservation;
     }
 
     async insert(): Promise<void> {
@@ -45,6 +47,7 @@ export class TermRecord implements Term {
             loginDr: this.loginDr,
             nameDr: this.nameDr,
             lastNameDr: this.lastNameDr,
+            reservation: 0,
         })
     }
 
@@ -62,8 +65,11 @@ export class TermRecord implements Term {
         })
     }
 
-    static async getAllIdTermByDrId(idDr: string): Promise<Term[] | null> {
-       const [results] = await pool.execute("SELECT `id` FROM `terms` WHERE idDr = :idDr", {
+    static async getFreeTerms(numberDay: string, month: string, year: string, idDr: string): Promise<Term[] | null> {
+       const [results] = await pool.execute("SELECT `id`, `hour`, `numberDay`, `month`, `year`, `reservation` FROM `terms` WHERE  numberDay = :numberDay AND month = :month AND year = :year AND idDr = :idDr", {
+            numberDay,
+            month,
+            year,
             idDr,
         }) as AdRecordResults;
         return results.map(obj => obj)

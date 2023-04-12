@@ -9,4 +9,14 @@ export interface Term {
     loginDr: string;
     nameDr: string;
     lastNameDr: string;
+    reservation?: number;
+}
+
+export interface FreeTerm {
+    id: string;
+    hour: string;
+    numberDay: string;
+    month: string;
+    year: string;
+    reservation?: number;
 }

@@ -28,7 +28,8 @@ patientRouter
                idDr: one.id,
                nameDr: one.name,
                lastNameDr: one.lastName,
-               specialization: one.specialization
+               specialization: one.specialization,
+               address: one.address,
            }
            )
         );
