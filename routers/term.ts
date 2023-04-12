@@ -32,7 +32,7 @@ termRouter
         const freeTerms: FreeTerm[] = await TermRecord.getFreeTerms(dayData.numberDay, dayData.month, dayData.year, dayData.idDr);
         res.json(freeTerms);
 
-        console.log(freeTerms);
+
         res.end();
 
 
