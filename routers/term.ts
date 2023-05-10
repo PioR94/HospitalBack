@@ -35,7 +35,13 @@ termRouter
 
         res.end();
 
+    })
 
+    .post('/book-term', async (req, res) => {
+        const id = req.body.id;
+
+        await TermRecord.bookTerm(id);
+        res.end();
     })
 
 

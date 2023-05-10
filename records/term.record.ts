@@ -82,4 +82,10 @@ export class TermRecord implements Term {
 
         return results.length !== 0;
     }
+
+    static async bookTerm(id: string): Promise<void> {
+        await pool.execute("UPDATE `terms` SET `reservation` = '1' WHERE id = :id", {
+            id,
+        })
+    }
 }
