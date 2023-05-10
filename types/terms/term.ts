@@ -12,6 +12,7 @@ export interface Term {
     reservation?: number;
 }
 
+
 export interface FreeTerm {
     id: string;
     hour: string;
