@@ -94,6 +94,7 @@ patientRouter
            id: patient.id,
            login: patient.login,
        })
+        res.end();
     })
 
 
@@ -101,7 +102,7 @@ patientRouter
 
     .post('/visits', async (req, res) => {
 
-        const visits = await VisitRecord.getAllByPtId(req.body.patientId);
+        const visits = await VisitRecord.getAllByPtId(req.body.data);
 
         const dataVisits = visits.map(one => ({
             idV: one.id,

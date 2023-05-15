@@ -71,8 +71,6 @@ export const doctorRouter = Router();
         .post('/log', async (req, res) => {
             const data = req.body;
 
-
-
             const hash = createHmac('sha512', SALT)
                 .update(data.password)
                 .digest('hex');
@@ -87,6 +85,5 @@ export const doctorRouter = Router();
                 name: doctor.name,
                 lastName: doctor.lastName,
             })
-
-
+            res.end();
         })

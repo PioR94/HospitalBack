@@ -7,19 +7,17 @@ export const termRouter = Router();
 
 termRouter
     .post('/term-id', async (req, res) => {
-           const termId = req.body.termId;
-
-           const r = await TermRecord.findId(termId);
-           res.json(r);
-
-           res.end();
+        const termId = req.body.data;
+        const r = await TermRecord.findId(termId);
+        res.json(r);
+        res.end();
     })
 
     .post('/add', async (req, res) => {
 
-       const term = new TermRecord(req.body)
+        const term = new TermRecord(req.body)
 
-       await TermRecord.getOne(term.id) ? await TermRecord.delete(term.id) :  await term.insert();
+        await TermRecord.getOne(term.id) ? await TermRecord.delete(term.id) : await term.insert();
 
         res.end();
 
@@ -38,7 +36,7 @@ termRouter
     })
 
     .post('/book-term', async (req, res) => {
-        const id = req.body.id;
+        const id = req.body.data;
 
         await TermRecord.bookTerm(id);
         res.end();
