@@ -1,8 +1,9 @@
 import {Doctor, Patient, User} from "../types";
 import {ValidationError} from "../utils/errors";
 import {FieldPacket} from "mysql2";
-import { pool } from "../utils/db";
+import {pool} from "../utils/db";
 import {v4 as uuid} from "uuid";
+import {PatientRecord} from "./patient.record";
 
 type AdRecordResults = [DoctorRecord[], FieldPacket[]];
 
@@ -16,7 +17,7 @@ export class DoctorRecord implements Doctor {
     address: string;
     specialization: string;
 
-    constructor (obj: Doctor) {
+    constructor(obj: Doctor) {
         if (obj.name.length < 3 || obj.name.length > 25) {
             throw new ValidationError('Imie musi zawierać się między 3 a 25 znaków')
         }
@@ -32,8 +33,6 @@ export class DoctorRecord implements Doctor {
         if (obj.specialization.length > 25) {
             throw new ValidationError('Nazwa nie może przekraczać 25 znaków');
         }
-
-
 
 
         this.id = obj.id;
@@ -77,6 +76,7 @@ export class DoctorRecord implements Doctor {
             specialization: this.specialization,
         });
     }
+
     static async getUserLogged(login: string, password: string): Promise<Doctor | null> {
         const [results] = await pool.execute("SELECT * FROM `doctors` WHERE login = :login AND password = :password", {
             login,
@@ -86,4 +86,4 @@ export class DoctorRecord implements Doctor {
     }
 
 
-    }
+}

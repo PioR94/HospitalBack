@@ -8,7 +8,6 @@ import {visitRouter} from "./routers/visit";
 import {termRouter} from "./routers/term";
 
 
-
 const app = express();
 
 app.use(cors({
@@ -18,7 +17,6 @@ app.use(json());
 app.use(handleError);
 
 
-
 app.use('/doctor', doctorRouter);
 app.use('/patient', patientRouter);
 app.use('/visit', visitRouter);
@@ -26,7 +24,6 @@ app.use('/term', termRouter);
 
 
 const date = new Date();
-
 
 
 app.listen(3001, '0.0.0.0', () => {
