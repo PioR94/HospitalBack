@@ -5,6 +5,7 @@ import {ValidationError} from "../utils/errors";
 import {VisitRecord} from "../records/visit.record";
 import {createHmac} from "crypto";
 import {SALT} from "../utils/cipher";
+import jwt from 'jsonwebtoken';
 
 
 interface Login {
