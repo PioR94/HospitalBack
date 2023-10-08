@@ -4,7 +4,8 @@ import {PatientRecord} from "../records/patient.record";
 import {ValidationError} from "../utils/errors";
 import {VisitRecord} from "../records/visit.record";
 import {createHmac} from "crypto";
-import {SALT} from "../utils/cipher";
+import {SALT} from "../ciphers";
+
 
 export const doctorRouter = Router();
 
@@ -18,32 +19,23 @@ doctorRouter
             date: one.date,
             idPt: one.patientId,
         }))
-
         res.json(dataVisits);
-
     })
 
 
     .post('/visit', async (req, res) => {
         const visit = new VisitRecord(req.body);
-
         await visit.insert();
-
     })
 
     .post('/ad', async (req, res) => {
         const patients = await PatientRecord.getAll();
         const doctors = await DoctorRecord.getAll();
         const doctor = new DoctorRecord(req.body);
-
         const users = [...patients, ...doctors];
-
-
         const hash = createHmac('sha512', SALT)
             .update(doctor.password)
             .digest('hex');
-
-
         const drHash = new DoctorRecord({
             ...doctor,
             password: hash,
@@ -52,7 +44,6 @@ doctorRouter
         await drHash.insert();
         res.json(doctor);
         res.end();
-
     })
 
 
@@ -63,7 +54,6 @@ doctorRouter
             .update(data.password)
             .digest('hex');
 
-
         const doctor = await DoctorRecord.getUserLogged(data.login, hash);
 
         if (doctor) res.json({
@@ -73,5 +63,9 @@ doctorRouter
             name: doctor.name,
             lastName: doctor.lastName,
         })
+        res.end();
+    })
+    .post('/find-doctor', (req, res) => {
+        console.log(req.body)
         res.end();
     })
