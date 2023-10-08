@@ -1,6 +1,8 @@
 import {Router} from "express";
 import {TermRecord} from "../records/term.record";
 import {FreeTerm} from "../types";
+import {authenticateToken} from "../utils/authenticate-token";
+import axios from "axios";
 
 
 export const termRouter = Router();
@@ -35,10 +37,14 @@ termRouter
 
     })
 
-    .post('/book-term', async (req, res) => {
-        const id = req.body.data;
+    .post('/book-term', authenticateToken, async (req, res) => {
 
-        await TermRecord.bookTerm(id);
+        const termId = req.body.termId
+        const idPt: string = (req as any).parsedToken.id;
+        console.log(req.body);
+        await TermRecord.bookTerm(termId, idPt);
+
+
         res.end();
     })
 

@@ -4,9 +4,10 @@ import 'express-async-errors'
 import {handleError} from "./utils/errors";
 import {doctorRouter} from "./routers/doctor";
 import {patientRouter} from "./routers/patient";
-import {visitRouter} from "./routers/visit";
 import {termRouter} from "./routers/term";
-
+import {specializationRouter} from "./routers/specialization";
+import axios from "axios";
+import {API_KEY} from "./ciphers";
 
 
 const app = express();
@@ -18,14 +19,14 @@ app.use(json());
 app.use(handleError);
 
 
-
 app.use('/doctor', doctorRouter);
 app.use('/patient', patientRouter);
-app.use('/visit', visitRouter);
 app.use('/term', termRouter);
+app.use('/specialization', specializationRouter);
 
 
-const date = new Date();
+
+
 
 
 

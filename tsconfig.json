@@ -12,5 +12,6 @@
     "emitDecoratorMetadata": true,  //do dekoratorów
     "moduleResolution": "Node",     //info, ze moduły mają być rozwiązanie w taki sposób jak w node
     "esModuleInterop": true,        //pozwala na te lepsze importy
+    "typeRoots": ["./src/types"]
   }
 }
