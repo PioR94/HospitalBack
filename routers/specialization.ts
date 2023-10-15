@@ -1,15 +1,12 @@
-import {Router} from "express";
-import {SpecializationRecord} from "../records/specialization.record";
+import { Router } from 'express';
+import { SpecializationRecord } from '../records/specialization.record';
 
 export const specializationRouter = Router();
 
-specializationRouter
+specializationRouter.get('/', async (req, res) => {
+  const response = await SpecializationRecord.getAll();
 
-.get('/', async (req, res) => {
-        const response = await SpecializationRecord.getAll();
+  const specializations = response.map((r) => r.specialization);
 
-        const specializations = response.map(r => (r.specialization)
-        )
-
-        res.json(specializations);
-})
+  res.json(specializations);
+});
