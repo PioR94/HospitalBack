@@ -76,11 +76,26 @@ export class DoctorRecord implements Doctor {
     return results.length === 0 ? null : new DoctorRecord(results[0]);
   }
 
-  static async findDoctors(city: string, specialization: string): Promise<Doctor | null> {
-    const [results] = (await pool.execute('SELECT * FROM `doctors` WHERE city = :city AND specialization = :specialization', {
+  static async findDoctors(city: string, specialization: string): Promise<Doctor[] | null> {
+    let query = 'SELECT * FROM `doctors` WHERE';
+
+    if (city && specialization) {
+      query += ' city = :city AND specialization = :specialization';
+    } else if (city) {
+      query += ' city = :city';
+    } else if (specialization) {
+      query += ' specialization = :specialization';
+    } else {
+      query += ' 1';
+    }
+
+    const params = {
       city,
       specialization,
-    })) as AdRecordResults;
-    return results.length === 0 ? null : new DoctorRecord(results[0]);
+    };
+
+    const [results] = (await pool.execute(query, params)) as AdRecordResults;
+
+    return results.map((obj) => new DoctorRecord(obj));
   }
 }

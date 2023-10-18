@@ -7,6 +7,7 @@ import { createHmac } from 'crypto';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import { authenticateToken } from '../utils/authenticate-token';
 import axios from 'axios';
+import { Doctor } from '../types';
 
 interface Login {
   login: string;
@@ -16,25 +17,6 @@ interface Login {
 export const patientRouter = Router();
 
 patientRouter
-
-  // .get('/', async (req, res) => {
-  //     const doctors = await DoctorRecord.getAll();
-  //
-  //     const dataDoctor = doctors.map(one => (
-  //             {
-  //                 idDr: one.id,
-  //                 nameDr: one.name,
-  //                 lastNameDr: one.lastName,
-  //                 specialization: one.specialization,
-  //                 address: one.address,
-  //             }
-  //         )
-  //     );
-  //
-  //     res.json(dataDoctor)
-  //
-  //
-  // })
 
   .post('/ad', async (req, res) => {
     console.log(typeof req.body.city);

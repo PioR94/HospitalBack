@@ -7,6 +7,7 @@ import { VisitRecord } from '../records/visit.record';
 import { createHmac } from 'crypto';
 
 import { SALT } from '../ciphers';
+import { Doctor } from '../types';
 
 export const doctorRouter = Router();
 
@@ -60,6 +61,20 @@ doctorRouter
 
     res.end();
   })
-  .post('/find-doctors', (req, res) => {
+  .post('/find-doctors', async (req, res) => {
+    console.log(req.body);
+
+    const doctors: Doctor[] = await DoctorRecord.findDoctors(req.body.city, req.body.specialization);
+    console.log(doctors);
+
+    const dataDoctors = doctors.map((one: Doctor) => ({
+      idDr: one.id,
+      nameDr: one.name,
+      lastNameDr: one.lastName,
+      street: one.street,
+      specialization: one.specialization,
+    }));
+    res.json(dataDoctors);
+
     res.end();
   });
