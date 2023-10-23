@@ -6,8 +6,11 @@ import { VisitRecord } from '../records/visit.record';
 
 import { createHmac } from 'crypto';
 
-import { SALT } from '../ciphers';
+import { SALT, SECRET_KEY } from '../ciphers';
 import { Doctor } from '../types';
+import jwt from 'jsonwebtoken';
+import { authenticateToken } from '../utils/authenticate-token';
+import { doc } from 'prettier';
 
 export const doctorRouter = Router();
 
@@ -45,27 +48,21 @@ doctorRouter
 
   .post('/log', async (req, res) => {
     const data = req.body;
-
     const hash = createHmac('sha512', SALT).update(data.password).digest('hex');
 
     const doctor = await DoctorRecord.getUserLogged(data.login, hash);
 
-    if (doctor)
-      res.json({
-        log: true,
-        id: doctor.id,
-        login: doctor.login,
-        name: doctor.name,
-        lastName: doctor.lastName,
-      });
+    if (doctor) {
+      const token = jwt.sign({ login: doctor.login, id: doctor.id }, SECRET_KEY, { expiresIn: '1h' });
 
+      res.json({
+        token,
+      });
+    }
     res.end();
   })
   .post('/find-doctors', async (req, res) => {
-    console.log(req.body);
-
     const doctors: Doctor[] = await DoctorRecord.findDoctors(req.body.city, req.body.specialization);
-    console.log(doctors);
 
     const dataDoctors = doctors.map((one: Doctor) => ({
       idDr: one.id,
@@ -77,4 +74,17 @@ doctorRouter
     res.json(dataDoctors);
 
     res.end();
+  })
+
+  .post('/get-doctor', authenticateToken, async (req, res) => {
+    const idDr: string = (req as any).parsedToken.id;
+    const doctor: Doctor = await DoctorRecord.getOne(idDr);
+    console.log(doctor);
+    const dataDoctor = {
+      id: doctor.id,
+      login: doctor.login,
+      name: doctor.name,
+      lastName: doctor.lastName,
+    };
+    res.json(dataDoctor);
   });

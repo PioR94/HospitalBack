@@ -19,20 +19,7 @@ export const patientRouter = Router();
 patientRouter
 
   .post('/ad', async (req, res) => {
-    console.log(typeof req.body.city);
-
-    const patients = await PatientRecord.getAll();
-
-    const doctors = await DoctorRecord.getAll();
     const patient = new PatientRecord(req.body);
-
-    const users = [...patients, ...doctors];
-
-    const data = users.filter((one) => {
-      if (one.login === patient.login || one.mail === patient.mail) {
-        console.log('Login lub mail sa już zajęte');
-      }
-    });
 
     const hash = createHmac('sha512', SALT).update(patient.password).digest('hex');
 
