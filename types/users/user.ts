@@ -5,12 +5,20 @@ export interface User {
     mail: string;
     name: string;
     lastName: string;
-    address: string;
+    street: string;
+
+
+    code: string;
+
+
+    city: string;
 }
 
 export interface Doctor extends User {
     specialization?: string;
 }
 
-export interface Patient extends User {}
+export interface Patient extends User {
+}
 
+ 

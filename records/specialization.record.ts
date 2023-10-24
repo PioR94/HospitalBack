@@ -1,24 +1,22 @@
-import {FieldPacket} from "mysql2";
-import {Specialization, Visit} from "../types";
-import {pool} from "../utils/db";
-
+import { FieldPacket } from 'mysql2';
+import { Specialization, Visit } from '../types';
+import { pool } from '../utils/db';
 
 type AdRecordResults = [SpecializationRecord[], FieldPacket[]];
 
-
 export class SpecializationRecord implements Specialization {
-    id: string;
-    specialization: string;
+  id: string;
+  specialization: string;
 
-    constructor(obj: Specialization) {
-        this.id = obj.id;
-        this.specialization = obj.specialization;
-    }
+  constructor(obj: Specialization) {
+    this.id = obj.id;
 
-    static async getAll(): Promise<Specialization[]>{
-        const [results] = await pool.execute("SELECT * FROM `specializations`") as AdRecordResults
+    this.specialization = obj.specialization;
+  }
 
-        return results.map(obj => new SpecializationRecord(obj));
-    }
+  static async getAll(): Promise<Specialization[]> {
+    const [results] = (await pool.execute('SELECT * FROM `specializations`')) as AdRecordResults;
 
+    return results.map((obj) => new SpecializationRecord(obj));
+  }
 }
