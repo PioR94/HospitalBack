@@ -15,7 +15,7 @@ export class SpecializationRecord implements Specialization {
   }
 
   static async getAll(): Promise<Specialization[]> {
-    const [results] = (await pool.execute('SELECT * FROM `specializations`')) as AdRecordResults;
+    const [results] = (await pool.execute('SELECT * FROM `specializations`')) as  AdRecordResults;
 
     return results.map((obj) => new SpecializationRecord(obj));
   }

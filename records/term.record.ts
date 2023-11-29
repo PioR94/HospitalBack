@@ -13,10 +13,7 @@ export class TermRecord implements Term {
   month: string;
   year: string;
   idDr: string;
-  loginDr: string;
-  nameDr: string;
-  lastNameDr: string;
-  reservation?: number;
+  idPt: string;
 
   constructor(obj: Term) {
     this.id = obj.id;
@@ -26,17 +23,12 @@ export class TermRecord implements Term {
     this.month = obj.month;
     this.year = obj.year;
     this.idDr = obj.idDr;
-    this.loginDr = obj.loginDr;
-    this.nameDr = obj.nameDr;
-    this.lastNameDr = obj.lastNameDr;
-    this.reservation = obj.reservation;
+    this.idPt = obj.idPt;
   }
 
   async insert(): Promise<void> {
-    // if (!this.id) this.id = uuid();
-
     await pool.execute(
-      'INSERT INTO `terms`(`id`, `hour`, `dayOfWeek`, `numberDay`, `month`, `year`, `idDr`, `loginDr`, `nameDr`, `lastNameDr`) VALUES(:id, :hour, :dayOfWeek, :numberDay, :month, :year, :idDr, :loginDr, :nameDr, :lastNameDr)',
+      'INSERT INTO `terms`(`id`, `hour`, `dayOfWeek`, `numberDay`, `month`, `year`, `idDr`, `idPt`) VALUES(:id, :hour, :dayOfWeek, :numberDay, :month, :year, :idDr, :idPt)',
       {
         id: this.id,
         hour: this.hour,
@@ -45,10 +37,7 @@ export class TermRecord implements Term {
         month: this.month,
         year: this.year,
         idDr: this.idDr,
-        loginDr: this.loginDr,
-        nameDr: this.nameDr,
-        lastNameDr: this.lastNameDr,
-        reservation: 0,
+        idPt: this.idPt,
       },
     );
   }
