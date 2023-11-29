@@ -17,7 +17,7 @@ termRouter
   .post('/add', async (req, res) => {
     const term = new TermRecord(req.body);
 
-    (await TermRecord.getOne(term.id)) ? await TermRecord.delete(term.id) : await term.insert();
+    await term.insert();
 
     res.end();
   })

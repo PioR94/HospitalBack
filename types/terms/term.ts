@@ -6,9 +6,7 @@ export interface Term {
   month: string;
   year: string;
   idDr: string;
-  loginDr: string;
-  nameDr: string;
-  lastNameDr: string;
+  idPt: string;
   reservation?: number;
 }
 

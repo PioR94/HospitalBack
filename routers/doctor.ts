@@ -79,7 +79,6 @@ doctorRouter
   .post('/get-doctor', authenticateToken, async (req, res) => {
     const idDr: string = (req as any).parsedToken.id;
     const doctor: Doctor = await DoctorRecord.getOne(idDr);
-    console.log(doctor);
     const dataDoctor = {
       id: doctor.id,
       login: doctor.login,

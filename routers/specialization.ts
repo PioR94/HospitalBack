@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { SpecializationRecord } from '../records/specialization.record';
+import { ScheduleRecord } from '../records/schedule.record';
 
 export const specializationRouter = Router();
 
