@@ -1,13 +1,13 @@
 import { Router } from 'express';
 import { DoctorRecord } from '../records/doctor.record';
 import { PatientRecord } from '../records/patient.record';
-import { VisitRecord } from '../records/visit.record';
+
 import { API_KEY, SALT, SECRET_KEY } from '../ciphers';
 import { createHmac } from 'crypto';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import { authenticateToken } from '../utils/authenticate-token';
 import axios from 'axios';
-import { Doctor } from '../types';
+import { Doctor, Patient } from '../types';
 
 interface Login {
   login: string;
@@ -18,7 +18,7 @@ export const patientRouter = Router();
 
 patientRouter
 
-  .post('/ad', async (req, res) => {
+  .post('/add', async (req, res) => {
     const patient = new PatientRecord(req.body);
 
     const hash = createHmac('sha512', SALT).update(patient.password).digest('hex');
@@ -50,23 +50,13 @@ patientRouter
     res.end();
   })
 
-  .post('/visits', async (req, res) => {
-    const visits = await VisitRecord.getAllByPtId(req.body.data);
-
-    const dataVisits = visits.map((one) => ({
-      idV: one.id,
-      date: one.date,
-      idDr: one.doctorId,
-    }));
-
-    res.json(dataVisits);
-  })
   .post('/get-id', authenticateToken, (req, res) => {
     const idPt: string = (req as any).parsedToken.id;
     res.json({
       idPt,
     });
   })
+
   .post('/google-api', (req, res) => {
     const inputText = req.body.data;
     axios
@@ -82,4 +72,25 @@ patientRouter
 
         res.end();
       });
+  })
+
+  .post('/get-user', authenticateToken, async (req, res) => {
+    const idPt: string = (req as any).parsedToken.id;
+    const patient: Patient = await PatientRecord.getOne(idPt);
+
+    if (!patient) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    const dataPatient = {
+      id: patient.id,
+      login: patient.login,
+      name: patient.name,
+      lastName: patient.lastName,
+      mail: patient.mail,
+      street: patient.street,
+      code: patient.code,
+      city: patient.city,
+    };
+    res.json(dataPatient);
   });
