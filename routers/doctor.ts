@@ -2,7 +2,6 @@ import { Router } from 'express';
 import { DoctorRecord } from '../records/doctor.record';
 import { PatientRecord } from '../records/patient.record';
 import { ValidationError } from '../utils/errors';
-import { VisitRecord } from '../records/visit.record';
 
 import { createHmac } from 'crypto';
 
@@ -15,21 +14,6 @@ import { doc } from 'prettier';
 export const doctorRouter = Router();
 
 doctorRouter
-  .post('/visits', async (req, res) => {
-    const visits = await VisitRecord.getAllByDrId(req.body.doctorId);
-
-    const dataVisits = visits.map((one) => ({
-      idV: one.id,
-      date: one.date,
-      idPt: one.patientId,
-    }));
-    res.json(dataVisits);
-  })
-
-  .post('/visit', async (req, res) => {
-    const visit = new VisitRecord(req.body);
-    await visit.insert();
-  })
 
   .post('/ad', async (req, res) => {
     const doctor = new DoctorRecord(req.body);
@@ -76,14 +60,24 @@ doctorRouter
     res.end();
   })
 
-  .post('/get-doctor', authenticateToken, async (req, res) => {
+  .post('/get-user', authenticateToken, async (req, res) => {
     const idDr: string = (req as any).parsedToken.id;
     const doctor: Doctor = await DoctorRecord.getOne(idDr);
+
+    if (!doctor) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
     const dataDoctor = {
       id: doctor.id,
       login: doctor.login,
       name: doctor.name,
       lastName: doctor.lastName,
+      mail: doctor.mail,
+      street: doctor.street,
+      code: doctor.code,
+      city: doctor.city,
+      specialization: doctor.specialization,
     };
     res.json(dataDoctor);
   });

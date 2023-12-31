@@ -13,7 +13,11 @@ export class TermRecord implements Term {
   month: string;
   year: string;
   idDr: string;
-  idPt: string;
+  idPt?: string;
+  nameDr: string;
+  lastNameDr: string;
+  namePt: string;
+  lastNamePt: string;
 
   constructor(obj: Term) {
     this.id = obj.id;
@@ -24,11 +28,15 @@ export class TermRecord implements Term {
     this.year = obj.year;
     this.idDr = obj.idDr;
     this.idPt = obj.idPt;
+    this.nameDr = obj.nameDr;
+    this.lastNameDr = obj.lastNameDr;
+    this.namePt = obj.namePt;
+    this.lastNamePt = obj.lastNamePt;
   }
 
   async insert(): Promise<void> {
     await pool.execute(
-      'INSERT INTO `terms`(`id`, `hour`, `dayOfWeek`, `numberDay`, `month`, `year`, `idDr`, `idPt`) VALUES(:id, :hour, :dayOfWeek, :numberDay, :month, :year, :idDr, :idPt)',
+      'INSERT INTO `terms`(`id`, `hour`, `dayOfWeek`, `numberDay`, `month`, `year`, `idDr`, `idPt`, `nameDr`, `lastNameDr`, `namePt`, `lastNamePt`) VALUES(:id, :hour, :dayOfWeek, :numberDay, :month, :year, :idDr, :idPt, :nameDr, :lastNameDr, :namePt, :lastNamePt)',
       {
         id: this.id,
         hour: this.hour,
@@ -38,6 +46,10 @@ export class TermRecord implements Term {
         year: this.year,
         idDr: this.idDr,
         idPt: this.idPt,
+        nameDr: this.nameDr,
+        lastNameDr: this.lastNameDr,
+        namePt: this.namePt,
+        lastNamePt: this.lastNamePt,
       },
     );
   }
@@ -56,9 +68,9 @@ export class TermRecord implements Term {
     });
   }
 
-  static async getFreeTerms(numberDay: string, month: string, year: string, idDr: string): Promise<Term[] | null> {
+  static async getTerms(numberDay: string, month: string, year: string, idDr: string): Promise<Term[] | null> {
     const [results] = (await pool.execute(
-      'SELECT `id`, `hour`, `numberDay`, `month`, `year`, `reservation` FROM `terms` WHERE  numberDay = :numberDay AND month = :month AND year = :year AND idDr = :idDr',
+      'SELECT * FROM `terms` WHERE  numberDay = :numberDay AND month = :month AND year = :year AND idDr = :idDr',
       {
         numberDay,
         month,
@@ -82,5 +94,19 @@ export class TermRecord implements Term {
       id,
       idPt,
     });
+  }
+
+  static async getPatientTerms(idPt: string): Promise<Term[] | null> {
+    const [results] = (await pool.execute('SELECT * FROM `terms` WHERE  idPt = :idPt', {
+      idPt,
+    })) as AdRecordResults;
+    return results.map((obj) => obj);
+  }
+
+  static async getDoctorTerms(idDr: string): Promise<Term[] | null> {
+    const [results] = (await pool.execute('SELECT * FROM `terms` WHERE  idDr = :idPt', {
+      idDr,
+    })) as AdRecordResults;
+    return results.map((obj) => obj);
   }
 }

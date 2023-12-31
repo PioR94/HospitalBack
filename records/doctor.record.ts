@@ -27,7 +27,6 @@ export class DoctorRecord implements Doctor {
     this.mail = obj.mail;
     this.name = obj.name;
     this.lastName = obj.lastName;
-
     this.street = obj.street;
     this.code = obj.code;
     this.city = obj.city;

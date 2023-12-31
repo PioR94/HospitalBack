@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { TermRecord } from '../records/term.record';
-import { FreeTerm } from '../types';
+import { ScheduleHour, Term } from '../types';
 import { authenticateToken } from '../utils/authenticate-token';
 import axios from 'axios';
 
@@ -22,20 +22,23 @@ termRouter
     res.end();
   })
 
-  .post('/free-terms', async (req, res) => {
-    const dayData = req.body;
+  .post('/terms', async (req, res) => {
+    const { idDr, numberDay, month, year } = req.body;
 
-    const freeTerms: FreeTerm[] = await TermRecord.getFreeTerms(dayData.numberDay, dayData.month, dayData.year, dayData.idDr);
-    res.json(freeTerms);
+    const terms: Term[] = await TermRecord.getTerms(numberDay, month, year, idDr);
+    const hours: ScheduleHour[] = terms.map((item: Term) => ({
+      id: item.id,
+      idDr: item.idDr,
+      day: item.dayOfWeek,
+      hour: item.hour,
+    }));
 
+    res.json(hours);
     res.end();
   })
 
-  .post('/book-term', authenticateToken, async (req, res) => {
-    const termId = req.body.termId;
-    const idPt: string = (req as any).parsedToken.id;
-    console.log(req.body);
-    await TermRecord.bookTerm(termId, idPt);
+  .post('/patient-terms', async (req, res) => {
+    const { userId } = req.body;
 
-    res.end();
+    const terms: Term[] = await TermRecord.getPatientTerms(userId);
   });

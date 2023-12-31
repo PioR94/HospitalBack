@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { ScheduleRecord } from '../records/schedule.record';
+import { Schedule } from '../types/schedules/schedule';
 
 export const scheduleRouter = Router();
 
@@ -20,16 +21,12 @@ scheduleRouter
 
     const schedule = await ScheduleRecord.getAllById(idDr);
 
-    console.log(schedule);
-
     res.json(schedule);
   })
   .post('/free-terms', async (req, res) => {
     const { dayOfWeek, idDr } = req.body;
 
-    const hours = await ScheduleRecord.getAllForOneDay(idDr, dayOfWeek);
-
+    const hours: Schedule[] = await ScheduleRecord.getAllForOneDay(idDr, dayOfWeek);
     res.json(hours);
-    console.log(hours);
     res.end();
   });

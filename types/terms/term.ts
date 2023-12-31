@@ -6,15 +6,17 @@ export interface Term {
   month: string;
   year: string;
   idDr: string;
-  idPt: string;
-  reservation?: number;
+  idPt?: string;
+  nameDr: string;
+  lastNameDr: string;
+  namePt: string;
+  lastNamePt: string;
 }
 
-export interface FreeTerm {
-  id: string;
+export interface ScheduleHour {
+  id?: string;
+  idDr: string;
+  day: string;
   hour: string;
-  numberDay: string;
-  month: string;
-  year: string;
-  reservation?: number;
+  className?: string;
 }
