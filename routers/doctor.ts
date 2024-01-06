@@ -1,33 +1,46 @@
 import { Router } from 'express';
 import { DoctorRecord } from '../records/doctor.record';
-import { PatientRecord } from '../records/patient.record';
-import { ValidationError } from '../utils/errors';
-
 import { createHmac } from 'crypto';
-
-import { SALT, SECRET_KEY } from '../ciphers';
+import { GOOGLE_API_KEY, SALT, SECRET_KEY } from '../ciphers';
 import { Doctor } from '../types';
 import jwt from 'jsonwebtoken';
 import { authenticateToken } from '../utils/authenticate-token';
 import { doc } from 'prettier';
+import axios from 'axios';
 
 export const doctorRouter = Router();
 
 doctorRouter
 
-  .post('/ad', async (req, res) => {
+  .post('/add', async (req, res) => {
     const doctor = new DoctorRecord(req.body);
-
     const hash = createHmac('sha512', SALT).update(doctor.password).digest('hex');
-    const drHash = new DoctorRecord({
-      ...doctor,
-      password: hash,
-    });
+    const address = `${doctor.street}, ${doctor.code}, ${doctor.city}`;
 
-    await drHash.insert();
+    try {
+      const geocodeResponse = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json`, {
+        params: {
+          address: address,
+          key: GOOGLE_API_KEY,
+        },
+      });
 
-    res.json(doctor);
-    res.end();
+      const location = geocodeResponse.data.results[0].geometry.location;
+
+      const drHash = new DoctorRecord({
+        ...doctor,
+        password: hash,
+        latitude: location.lat,
+        longitude: location.lng,
+      });
+
+      await drHash.insert();
+
+      res.json({ ...doctor, latitude: location.lat, longitude: location.lng });
+    } catch (error) {
+      console.error(error);
+      res.status(500).send('Błąd podczas geokodowania adresu');
+    }
   })
 
   .post('/log', async (req, res) => {
@@ -54,6 +67,8 @@ doctorRouter
       lastNameDr: one.lastName,
       street: one.street,
       specialization: one.specialization,
+      city: one.city,
+      price: one.price,
     }));
     res.json(dataDoctors);
 
@@ -78,6 +93,12 @@ doctorRouter
       code: doctor.code,
       city: doctor.city,
       specialization: doctor.specialization,
+      price: doctor.price,
     };
     res.json(dataDoctor);
+  })
+  .put('/profile-settings', async (req, res) => {
+    console.log(req.body);
+
+    await DoctorRecord.updateProfile(req.body);
   });

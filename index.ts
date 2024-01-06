@@ -7,6 +7,7 @@ import { patientRouter } from './routers/patient';
 import { termRouter } from './routers/term';
 import { specializationRouter } from './routers/specialization';
 import { scheduleRouter } from './routers/schedule';
+import { paymentRouter } from './routers/payment';
 
 const app = express();
 
@@ -22,7 +23,8 @@ app.use('/doctor', doctorRouter);
 app.use('/patient', patientRouter);
 app.use('/term', termRouter);
 app.use('/specialization', specializationRouter);
-app.use('/schedule', scheduleRouter)
+app.use('/schedule', scheduleRouter);
+app.use('/payment', paymentRouter);
 
 app.listen(3001, '0.0.0.0', () => {
   console.log('Listening on port http://localhost:3001');

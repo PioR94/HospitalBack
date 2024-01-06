@@ -18,6 +18,7 @@ export class TermRecord implements Term {
   lastNameDr: string;
   namePt: string;
   lastNamePt: string;
+  price: string;
 
   constructor(obj: Term) {
     this.id = obj.id;
@@ -32,11 +33,12 @@ export class TermRecord implements Term {
     this.lastNameDr = obj.lastNameDr;
     this.namePt = obj.namePt;
     this.lastNamePt = obj.lastNamePt;
+    this.price = obj.price;
   }
 
   async insert(): Promise<void> {
     await pool.execute(
-      'INSERT INTO `terms`(`id`, `hour`, `dayOfWeek`, `numberDay`, `month`, `year`, `idDr`, `idPt`, `nameDr`, `lastNameDr`, `namePt`, `lastNamePt`) VALUES(:id, :hour, :dayOfWeek, :numberDay, :month, :year, :idDr, :idPt, :nameDr, :lastNameDr, :namePt, :lastNamePt)',
+      'INSERT INTO `terms`(`id`, `hour`, `dayOfWeek`, `numberDay`, `month`, `year`, `idDr`, `idPt`, `nameDr`, `lastNameDr`, `namePt`, `lastNamePt`, `price`) VALUES(:id, :hour, :dayOfWeek, :numberDay, :month, :year, :idDr, :idPt, :nameDr, :lastNameDr, :namePt, :lastNamePt, :price)',
       {
         id: this.id,
         hour: this.hour,
@@ -50,6 +52,7 @@ export class TermRecord implements Term {
         lastNameDr: this.lastNameDr,
         namePt: this.namePt,
         lastNamePt: this.lastNamePt,
+        price: this.price,
       },
     );
   }
@@ -104,7 +107,7 @@ export class TermRecord implements Term {
   }
 
   static async getDoctorTerms(idDr: string): Promise<Term[] | null> {
-    const [results] = (await pool.execute('SELECT * FROM `terms` WHERE  idDr = :idPt', {
+    const [results] = (await pool.execute('SELECT * FROM `terms` WHERE  idDr = :idDr', {
       idDr,
     })) as AdRecordResults;
     return results.map((obj) => obj);

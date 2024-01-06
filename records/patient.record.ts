@@ -70,4 +70,23 @@ export class PatientRecord implements Patient {
       },
     );
   }
+  static async updateProfile(updateData: Partial<Patient>): Promise<void> {
+    await pool.execute(
+      `UPDATE patients SET
+       name = :name,
+       lastName = :lastName,
+       street = :street,
+       code = :code,
+       city = :city
+       WHERE id = :id`,
+      {
+        id: updateData.id,
+        name: updateData.name,
+        lastName: updateData.lastName,
+        street: updateData.street,
+        code: updateData.code,
+        city: updateData.city,
+      },
+    );
+  }
 }

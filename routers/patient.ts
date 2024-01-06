@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { DoctorRecord } from '../records/doctor.record';
 import { PatientRecord } from '../records/patient.record';
 
-import { API_KEY, SALT, SECRET_KEY } from '../ciphers';
+import { GOOGLE_API_KEY, SALT, SECRET_KEY } from '../ciphers';
 import { createHmac } from 'crypto';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import { authenticateToken } from '../utils/authenticate-token';
@@ -61,13 +61,13 @@ patientRouter
     const inputText = req.body.data;
     axios
       .get(
-        `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${inputText}&types=(cities)&language=pl&components=country:PL&key=${API_KEY}`,
+        `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${inputText}&types=(cities)&language=pl&components=country:PL&key=${GOOGLE_API_KEY}`,
       )
 
       .then(function (response) {
         const predictions = response.data.predictions;
         const mainTexts = predictions.map((prediction: any) => prediction.structured_formatting.main_text);
-
+        console.log(mainTexts);
         res.json(mainTexts);
 
         res.end();
@@ -93,4 +93,7 @@ patientRouter
       city: patient.city,
     };
     res.json(dataPatient);
+  })
+  .put('/profile-settings', async (req, res) => {
+    await PatientRecord.updateProfile(req.body);
   });
