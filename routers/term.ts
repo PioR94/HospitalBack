@@ -3,6 +3,7 @@ import { TermRecord } from '../records/term.record';
 import { ScheduleHour, Term } from '../types';
 import { authenticateToken } from '../utils/authenticate-token';
 import axios from 'axios';
+import { json } from 'stream/consumers';
 
 export const termRouter = Router();
 
@@ -16,7 +17,7 @@ termRouter
 
   .post('/add', async (req, res) => {
     const term = new TermRecord(req.body);
-
+    console.log(term);
     await term.insert();
 
     res.end();
@@ -38,7 +39,43 @@ termRouter
   })
 
   .post('/patient-terms', async (req, res) => {
-    const { userId } = req.body;
+    const userId = req.body.data;
 
     const terms: Term[] = await TermRecord.getPatientTerms(userId);
+
+    const dataTerms = terms.map((item: Term) => ({
+      id: item.id,
+      name: item.nameDr,
+      lastName: item.lastNameDr,
+      numberDay: item.numberDay,
+      month: item.month,
+      year: item.year,
+      hour: item.hour,
+      price: item.price,
+      status: item.status,
+    }));
+
+    res.json(dataTerms);
+    res.end();
+  })
+
+  .post('/doctor-terms', async (req, res) => {
+    const userId = req.body.data;
+
+    const terms: Term[] = await TermRecord.getDoctorTerms(userId);
+
+    const dataTerms = terms.map((item: Term) => ({
+      id: item.id,
+      name: item.namePt,
+      lastName: item.lastNamePt,
+      numberDay: item.numberDay,
+      month: item.month,
+      year: item.year,
+      hour: item.hour,
+      price: item.price,
+      status: item.status,
+    }));
+
+    res.json(dataTerms);
+    res.end();
   });

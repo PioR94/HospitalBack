@@ -16,9 +16,11 @@ export class DoctorRecord implements Doctor {
   lastName: string;
   street: string;
   code: string;
-
   city: string;
   specialization: string;
+  price?: string;
+  latitude: number;
+  longitude: number;
 
   constructor(obj: Doctor) {
     this.id = obj.id;
@@ -31,6 +33,9 @@ export class DoctorRecord implements Doctor {
     this.code = obj.code;
     this.city = obj.city;
     this.specialization = obj.specialization;
+    this.price = obj.price;
+    this.latitude = obj.latitude;
+    this.longitude = obj.longitude;
   }
 
   static async getOne(id: string): Promise<Doctor | null> {
@@ -51,7 +56,7 @@ export class DoctorRecord implements Doctor {
       this.id = uuid();
     }
     await pool.execute(
-      'INSERT INTO `doctors`(`id`, `login`,`password`, `mail`, `name`, `lastName`, `street`,`code`, `city`, `specialization`) VALUES(:id, :login, :password, :mail, :name, :lastName, :street, :code, :city, :specialization)',
+      'INSERT INTO `doctors`(`id`, `login`,`password`, `mail`, `name`, `lastName`, `street`,`code`, `city`, `specialization`, `latitude`, `longitude`) VALUES(:id, :login, :password, :mail, :name, :lastName, :street, :code, :city, :specialization, :latitude, :longitude)',
       {
         id: this.id,
         login: this.login,
@@ -63,6 +68,8 @@ export class DoctorRecord implements Doctor {
         code: this.code,
         city: this.city,
         specialization: this.specialization,
+        latitude: this.latitude,
+        longitude: this.longitude,
       },
     );
   }
@@ -96,5 +103,29 @@ export class DoctorRecord implements Doctor {
     const [results] = (await pool.execute(query, params)) as AdRecordResults;
 
     return results.map((obj) => new DoctorRecord(obj));
+  }
+
+  static async updateProfile(updateData: Partial<Doctor>): Promise<void> {
+    await pool.execute(
+      `UPDATE patients SET
+     name = :name,
+     lastName = :lastName,
+     street = :street,
+     code = :code,
+     city = :city,
+     specialization = :specialization,
+     price = :price
+     WHERE id = :id`,
+      {
+        id: updateData.id,
+        name: updateData.name,
+        lastName: updateData.lastName,
+        street: updateData.street,
+        code: updateData.code,
+        city: updateData.city,
+        specialization: updateData.specialization,
+        price: updateData.price,
+      },
+    );
   }
 }

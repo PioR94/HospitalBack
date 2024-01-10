@@ -11,6 +11,8 @@ export interface Term {
   lastNameDr: string;
   namePt: string;
   lastNamePt: string;
+  price?: string;
+  status?: string;
 }
 
 export interface ScheduleHour {
