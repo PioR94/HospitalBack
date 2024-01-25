@@ -39,7 +39,7 @@ doctorRouter
       res.json({ ...doctor, latitude: location.lat, longitude: location.lng });
     } catch (error) {
       console.error(error);
-      res.status(500).send('Błąd podczas geokodowania adresu');
+      res.status(500).send('Error geocoding address');
     }
   })
 
@@ -69,6 +69,8 @@ doctorRouter
       specialization: one.specialization,
       city: one.city,
       price: one.price,
+      latitude: one.latitude,
+      longitude: one.longitude,
     }));
     res.json(dataDoctors);
 
@@ -98,7 +100,26 @@ doctorRouter
     res.json(dataDoctor);
   })
   .put('/profile-settings', async (req, res) => {
-    console.log(req.body);
+    const dataProfile = req.body;
+    const address = `${dataProfile.street}, ${dataProfile.code}, ${dataProfile.city}`;
 
-    await DoctorRecord.updateProfile(req.body);
+    try {
+      const geocodeResponse = await axios.get(`https://maps.googleapis.com/maps/api/geocode/json`, {
+        params: {
+          address: address,
+          key: GOOGLE_API_KEY,
+        },
+      });
+      const location = geocodeResponse.data.results[0].geometry.location;
+      const updateData = {
+        ...dataProfile,
+        latitude: location.lat,
+        longitude: location.lng,
+      };
+      await DoctorRecord.updateProfile(updateData);
+      console.log( updateData)
+    } catch (error) {
+      console.error(error);
+      res.status(500).send('Error geocoding address');
+    }
   });

@@ -107,14 +107,16 @@ export class DoctorRecord implements Doctor {
 
   static async updateProfile(updateData: Partial<Doctor>): Promise<void> {
     await pool.execute(
-      `UPDATE patients SET
+      `UPDATE doctors SET
      name = :name,
      lastName = :lastName,
      street = :street,
      code = :code,
      city = :city,
      specialization = :specialization,
-     price = :price
+     price = :price,
+     latitude = :latitude,
+     longitude = :longitude
      WHERE id = :id`,
       {
         id: updateData.id,
@@ -125,6 +127,8 @@ export class DoctorRecord implements Doctor {
         city: updateData.city,
         specialization: updateData.specialization,
         price: updateData.price,
+        latitude: updateData.latitude,
+        longitude: updateData.longitude,
       },
     );
   }
