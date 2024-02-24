@@ -24,7 +24,6 @@ describe('doctor.record.insert', () => {
 
     expect(pool.execute).toHaveBeenCalledWith(
       expect.anything(),
-
       expect.objectContaining({
         id: mockDoctor.id,
         login: mockDoctor.login,

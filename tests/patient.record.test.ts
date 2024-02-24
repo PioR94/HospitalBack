@@ -1,6 +1,6 @@
 import { PatientRecord } from '../records/patient.record';
 import { pool } from '../utils/db';
-import { mockPatient } from '../utils/mocks';
+import { mockPatient, mockPatientsResults } from '../utils/mocks';
 
 jest.mock('../utils/db', () => ({
   pool: {
@@ -35,5 +35,29 @@ describe('patient.record.getUserLogged', () => {
     const result = await PatientRecord.getUserLogged('wrongLogin', 'wrongPassword');
 
     expect(result).toBeNull();
+  });
+});
+
+describe('patient.record.getAll', () => {
+  it('returns a list of PatientRecords based on database results', async () => {
+    pool.execute = jest.fn().mockResolvedValue([mockPatientsResults, []]);
+
+    const results = await PatientRecord.getAll();
+
+    expect(results).toHaveLength(mockPatientsResults.length);
+
+    results.forEach((result, index) => {
+      expect(result).toBeInstanceOf(PatientRecord);
+
+      expect(result).toMatchObject(mockPatientsResults[index]);
+    });
+  });
+
+  it('returns an empty array when no patients are found', async () => {
+    pool.execute = jest.fn().mockResolvedValue([[], []]);
+
+    const results = await PatientRecord.getAll();
+
+    expect(results).toEqual([]);
   });
 });

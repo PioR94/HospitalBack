@@ -1,4 +1,4 @@
-import { Doctor } from '../types';
+import { Doctor, Patient } from '../types';
 
 export const mockDoctor: Doctor = {
   id: '1',
@@ -16,7 +16,7 @@ export const mockDoctor: Doctor = {
   longitude: 51.2222,
 };
 
-export const mockPatient = {
+export const mockPatient: Patient = {
   id: '2',
   login: 'patient',
   password: '1111',
@@ -27,3 +27,17 @@ export const mockPatient = {
   code: '22-22',
   city: 'London',
 };
+
+export const mockPatient2: Patient = {
+  id: '2',
+  login: 'patient22',
+  password: '2222',
+  mail: 'patient2@o2.pl',
+  name: 'Alan',
+  lastName: 'Rickman',
+  street: 'Short Street',
+  code: '21-22',
+  city: 'London',
+};
+
+export const mockPatientsResults: Patient[] = [mockPatient, mockPatient2];
