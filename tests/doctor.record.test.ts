@@ -43,4 +43,14 @@ describe('Insert', () => {
   });
 });
 
+describe('GetOne', () => {
+  it('retrieves the correct doctor based on id', async () => {
+    const mockId = '1';
 
+    pool.execute = jest.fn().mockResolvedValue([[mockDoctor], []]);
+
+    const result = await DoctorRecord.getOne(mockId);
+
+    expect(result).toHaveProperty('id', mockId);
+  });
+});
