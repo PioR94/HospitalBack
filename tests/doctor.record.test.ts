@@ -8,7 +8,7 @@ jest.mock('../utils/db', () => ({
   },
 }));
 
-describe('Insert', () => {
+describe('doctor.record.insert', () => {
   const doctor = new DoctorRecord(mockDoctor);
 
   it('calls pool.execute with correct SQL query for insert', async () => {
@@ -43,7 +43,7 @@ describe('Insert', () => {
   });
 });
 
-describe('GetOne', () => {
+describe('doctor.record.getOne', () => {
   it('retrieves the correct doctor based on id', async () => {
     const mockId = '1';
 
@@ -55,7 +55,7 @@ describe('GetOne', () => {
   });
 });
 
-describe('FindDoctors', () => {
+describe('doctor.record.findDoctors', () => {
   beforeEach(() => {
     pool.execute = jest.fn().mockResolvedValue([[], []]); // Resetowanie mocka przed każdym testem
   });
