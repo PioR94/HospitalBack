@@ -54,3 +54,41 @@ describe('GetOne', () => {
     expect(result).toHaveProperty('id', mockId);
   });
 });
+
+describe('FindDoctors', () => {
+  beforeEach(() => {
+    pool.execute = jest.fn().mockResolvedValue([[], []]); // Resetowanie mocka przed każdym testem
+  });
+
+  it('builds correct query for both city and specialization provided', async () => {
+    await DoctorRecord.findDoctors('CityName', 'SpecializationName');
+
+    expect(pool.execute).toHaveBeenCalledWith(
+      expect.stringContaining('WHERE city = :city AND specialization = :specialization'),
+
+      expect.objectContaining({ city: 'CityName', specialization: 'SpecializationName' }),
+    );
+  });
+
+  it('builds correct query for only city provided', async () => {
+    await DoctorRecord.findDoctors('CityName', '');
+
+    expect(pool.execute).toHaveBeenCalledWith(expect.stringContaining('WHERE city = :city'), expect.objectContaining({ city: 'CityName' }));
+  });
+
+  it('builds correct query for only specialization provided', async () => {
+    await DoctorRecord.findDoctors('', 'SpecializationName');
+
+    expect(pool.execute).toHaveBeenCalledWith(
+      expect.stringContaining('WHERE specialization = :specialization'),
+
+      expect.objectContaining({ specialization: 'SpecializationName' }),
+    );
+  });
+
+  it('builds correct query for neither city nor specialization provided', async () => {
+    await DoctorRecord.findDoctors('', '');
+
+    expect(pool.execute).toHaveBeenCalledWith(expect.stringContaining('WHERE 1'), { city: '', specialization: '' });
+  });
+});
