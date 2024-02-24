@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
 import { Request, Response, NextFunction } from 'express';
-import { SECRET_KEY } from '../ciphers';
+
+const SECRET_KEY = process.env.SECRET_KEY;
 
 export const authenticateToken = (req: Request, res: Response, next: NextFunction) => {
   const token = req.header('Authorization')?.replace('Bearer ', '');

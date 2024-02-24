@@ -1,5 +1,4 @@
 import { Patient } from '../types';
-import { ValidationError } from '../utils/errors';
 import { FieldPacket } from 'mysql2';
 import { pool } from '../utils/db';
 import { v4 as uuid } from 'uuid';

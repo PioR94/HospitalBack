@@ -1,9 +1,7 @@
-import { Doctor, Patient, User } from '../types';
-import { ValidationError } from '../utils/errors';
+import { Doctor } from '../types';
 import { FieldPacket } from 'mysql2';
 import { pool } from '../utils/db';
 import { v4 as uuid } from 'uuid';
-import { PatientRecord } from './patient.record';
 
 type AdRecordResults = [DoctorRecord[], FieldPacket[]];
 
@@ -55,6 +53,7 @@ export class DoctorRecord implements Doctor {
     if (!this.id) {
       this.id = uuid();
     }
+
     await pool.execute(
       'INSERT INTO `doctors`(`id`, `login`,`password`, `mail`, `name`, `lastName`, `street`,`code`, `city`, `specialization`, `latitude`, `longitude`) VALUES(:id, :login, :password, :mail, :name, :lastName, :street, :code, :city, :specialization, :latitude, :longitude)',
       {
@@ -87,11 +86,17 @@ export class DoctorRecord implements Doctor {
 
     if (city && specialization) {
       query += ' city = :city AND specialization = :specialization';
-    } else if (city) {
+    }
+
+    if (city && !specialization) {
       query += ' city = :city';
-    } else if (specialization) {
+    }
+
+    if (!city && specialization) {
       query += ' specialization = :specialization';
-    } else {
+    }
+
+    if (!city && !specialization) {
       query += ' 1';
     }
 

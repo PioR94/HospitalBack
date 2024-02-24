@@ -1,7 +1,7 @@
+import 'dotenv/config';
 import express, { json } from 'express';
 import cors from 'cors';
 import 'express-async-errors';
-import { handleError } from './utils/errors';
 import { doctorRouter } from './routers/doctor';
 import { patientRouter } from './routers/patient';
 import { termRouter } from './routers/term';
@@ -11,13 +11,14 @@ import { paymentRouter } from './routers/payment';
 
 const app = express();
 
+const baseUrl = process.env.BASE_URL;
+
 app.use(
   cors({
-    origin: 'http://localhost:3000',
+    origin: baseUrl,
   }),
 );
 app.use(json());
-app.use(handleError);
 
 app.use('/doctor', doctorRouter);
 app.use('/patient', patientRouter);

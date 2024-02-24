@@ -1,12 +1,14 @@
 import { Router } from 'express';
 import { DoctorRecord } from '../records/doctor.record';
 import { createHmac } from 'crypto';
-import { GOOGLE_API_KEY, SALT, SECRET_KEY } from '../ciphers';
 import { Doctor } from '../types';
 import jwt from 'jsonwebtoken';
 import { authenticateToken } from '../utils/authenticate-token';
-import { doc } from 'prettier';
 import axios from 'axios';
+
+const SALT = process.env.SALT;
+const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY;
+const SECRET_KEY = process.env.SECRET_KEY;
 
 export const doctorRouter = Router();
 
@@ -14,7 +16,9 @@ doctorRouter
 
   .post('/add', async (req, res) => {
     const doctor = new DoctorRecord(req.body);
+
     const hash = createHmac('sha512', SALT).update(doctor.password).digest('hex');
+
     const address = `${doctor.street}, ${doctor.code}, ${doctor.city}`;
 
     try {
@@ -79,6 +83,7 @@ doctorRouter
 
   .post('/get-user', authenticateToken, async (req, res) => {
     const idDr: string = (req as any).parsedToken.id;
+
     const doctor: Doctor = await DoctorRecord.getOne(idDr);
 
     if (!doctor) {
@@ -86,7 +91,7 @@ doctorRouter
     }
 
     const dataDoctor = {
-      id: doctor.id,
+      idUser: doctor.id,
       login: doctor.login,
       name: doctor.name,
       lastName: doctor.lastName,
@@ -101,6 +106,7 @@ doctorRouter
   })
   .put('/profile-settings', async (req, res) => {
     const dataProfile = req.body;
+
     const address = `${dataProfile.street}, ${dataProfile.code}, ${dataProfile.city}`;
 
     try {
@@ -111,13 +117,14 @@ doctorRouter
         },
       });
       const location = geocodeResponse.data.results[0].geometry.location;
+
       const updateData = {
         ...dataProfile,
         latitude: location.lat,
         longitude: location.lng,
       };
+
       await DoctorRecord.updateProfile(updateData);
-      console.log( updateData)
     } catch (error) {
       console.error(error);
       res.status(500).send('Error geocoding address');

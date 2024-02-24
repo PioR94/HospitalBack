@@ -1,18 +1,13 @@
 import { Router } from 'express';
-import { DoctorRecord } from '../records/doctor.record';
 import { PatientRecord } from '../records/patient.record';
-
-import { GOOGLE_API_KEY, SALT, SECRET_KEY } from '../ciphers';
 import { createHmac } from 'crypto';
-import jwt, { JwtPayload } from 'jsonwebtoken';
+import jwt from 'jsonwebtoken';
 import { authenticateToken } from '../utils/authenticate-token';
 import axios from 'axios';
-import { Doctor, Patient } from '../types';
-
-interface Login {
-  login: string;
-  password: string;
-}
+import { Patient } from '../types';
+const SALT = process.env.SALT;
+const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY;
+const SECRET_KEY = process.env.SECRET_KEY;
 
 export const patientRouter = Router();
 
@@ -52,6 +47,7 @@ patientRouter
 
   .post('/get-id', authenticateToken, (req, res) => {
     const idPt: string = (req as any).parsedToken.id;
+
     res.json({
       idPt,
     });
@@ -59,6 +55,7 @@ patientRouter
 
   .post('/google-api', (req, res) => {
     const inputText = req.body.data;
+
     axios
       .get(
         `https://maps.googleapis.com/maps/api/place/autocomplete/json?input=${inputText}&types=(cities)&language=pl&components=country:PL&key=${GOOGLE_API_KEY}`,
@@ -66,8 +63,9 @@ patientRouter
 
       .then(function (response) {
         const predictions = response.data.predictions;
+
         const mainTexts = predictions.map((prediction: any) => prediction.structured_formatting.main_text);
-        console.log(mainTexts);
+
         res.json(mainTexts);
 
         res.end();
@@ -76,6 +74,7 @@ patientRouter
 
   .post('/get-user', authenticateToken, async (req, res) => {
     const idPt: string = (req as any).parsedToken.id;
+
     const patient: Patient = await PatientRecord.getOne(idPt);
 
     if (!patient) {
@@ -83,7 +82,7 @@ patientRouter
     }
 
     const dataPatient = {
-      id: patient.id,
+      idUser: patient.id,
       login: patient.login,
       name: patient.name,
       lastName: patient.lastName,
@@ -92,8 +91,10 @@ patientRouter
       code: patient.code,
       city: patient.city,
     };
+
     res.json(dataPatient);
   })
+
   .put('/profile-settings', async (req, res) => {
     await PatientRecord.updateProfile(req.body);
   });
