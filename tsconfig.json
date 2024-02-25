@@ -11,6 +11,6 @@
     "emitDecoratorMetadata": true,
     "moduleResolution": "Node",
     "esModuleInterop": true,
-    "typeRoots": ["./src/types"]
+    "typeRoots": ["./node_modules/@types", "./src/types"]
   }
 }

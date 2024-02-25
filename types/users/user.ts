@@ -1,4 +1,4 @@
-export interface User {
+export interface Patient {
   id?: string;
   login: string;
   password: string;
@@ -10,11 +10,18 @@ export interface User {
   city: string;
 }
 
-export interface Doctor extends User {
+export interface Doctor {
+  id?: string;
+  login: string;
+  password: string;
+  mail: string;
+  name: string;
+  lastName: string;
+  street: string;
+  code: string;
+  city: string;
   specialization?: string;
   price?: string;
   latitude: number;
   longitude: number;
 }
-
-export interface Patient extends User {}
