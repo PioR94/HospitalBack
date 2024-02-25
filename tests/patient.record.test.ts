@@ -1,6 +1,7 @@
 import { PatientRecord } from '../records/patient.record';
+import { ScheduleRecord } from '../records/schedule.record';
 import { pool } from '../utils/db';
-import { mockPatient, mockPatientsResults } from '../utils/mocks';
+import { mockPatient, mockPatientsResults, mockSchedulesData } from '../utils/mocks';
 
 jest.mock('../utils/db', () => ({
   pool: {

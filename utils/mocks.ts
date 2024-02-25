@@ -1,4 +1,5 @@
 import { Doctor, Patient } from '../types';
+import { Schedule } from '../types/schedules/schedule';
 
 export const mockDoctor: Doctor = {
   id: '1',
@@ -41,3 +42,9 @@ export const mockPatient2: Patient = {
 };
 
 export const mockPatientsResults: Patient[] = [mockPatient, mockPatient2];
+
+export const mockSchedulesData: Schedule[] = [
+  { id: '1', idDr: '11', day: 'Friday', hour: '6:00' },
+  { id: '2', idDr: '11', day: 'Monday', hour: '10:00' },
+  { id: '3', idDr: '11', day: 'Tuesday', hour: '11:00' },
+];
