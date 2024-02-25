@@ -53,6 +53,10 @@ doctorRouter
 
     const doctor = await DoctorRecord.getUserLogged(data.login, hash);
 
+    if (!doctor) {
+      return res.status(401).json({ error: 'Invalid login or password' });
+    }
+
     if (doctor) {
       const token = jwt.sign({ login: doctor.login, id: doctor.id }, SECRET_KEY, { expiresIn: '1h' });
 
