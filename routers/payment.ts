@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import Stripe from 'stripe';
-import { STRIPE_SECRET_KEY } from '../ciphers';
+
+const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY;
 
 const stripe = new Stripe(STRIPE_SECRET_KEY, { apiVersion: '2023-10-16' });
 
@@ -8,7 +9,6 @@ export const paymentRouter = Router();
 
 paymentRouter.post('/create-checkout-session', async (req, res) => {
   const price = req.body.data;
-  console.log(price);
 
   const session = await stripe.checkout.sessions.create({
     payment_method_types: ['card'],
@@ -19,7 +19,7 @@ paymentRouter.post('/create-checkout-session', async (req, res) => {
           product_data: {
             name: 'Rezerwacja',
           },
-          unit_amount: price,
+          unit_amount: price * 100,
         },
         quantity: 1,
       },

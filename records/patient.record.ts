@@ -1,5 +1,4 @@
 import { Patient } from '../types';
-import { ValidationError } from '../utils/errors';
 import { FieldPacket } from 'mysql2';
 import { pool } from '../utils/db';
 import { v4 as uuid } from 'uuid';
@@ -42,6 +41,7 @@ export class PatientRecord implements Patient {
       login,
       password,
     })) as AdRecordResults;
+
     return results.length === 0 ? null : new PatientRecord(results[0]);
   }
 
@@ -55,6 +55,7 @@ export class PatientRecord implements Patient {
     if (!this.id) {
       this.id = uuid();
     }
+
     await pool.execute(
       'INSERT INTO `patients`(`id`, `login`, `password`, `mail`, `name`, `lastName`, `street`, `code`, `city`) VALUES(:id, :login, :password, :mail, :name, :lastName,  :street, :code, :city)',
       {
@@ -70,6 +71,7 @@ export class PatientRecord implements Patient {
       },
     );
   }
+
   static async updateProfile(updateData: Partial<Patient>): Promise<void> {
     await pool.execute(
       `UPDATE patients SET
