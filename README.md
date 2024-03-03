@@ -1,69 +1,89 @@
-# HospitalBack
-> This is a site that helps the patient register for an appointment.
+# Hospital-Back
 
-### Table of Contents
-* [General Info](#general-information)
-* [Technologies Used](#technologies-used)
-* [Features](#features)
-* [Getting started](#getting-started)
+Hospital-Back is a backend application designed to interface with a frontend, managing appointments, user registrations, and payments in the healthcare domain. It utilizes a range of technologies and APIs, including Google Places, Google Geocoding, and Stripe for a comprehensive service offering.
+
+## Features
+
+- **Database Management**: Handles records for available slots, booked appointments, and new user registrations.
+- **Token Generation**: Utilizes JWT for secure token generation.
+- **Integration with Google APIs**: Connects with Google Places API and Google Geocoding for enhanced location services.
+- **Payment Processing**: Incorporates Stripe for handling payments.
+
+## Technologies
+
+This project is built using the following technologies:
+
+- Node.js  
+- Express 
+- TypeScript 
+- MySQL 
+- JWT 
+- Axios 
+- Stripe
+- Google Places API
+- Google Geocoding 
+
+## Getting Started
+
+### Prerequisites
+
+Ensure you have Node.js and npm installed on your system. Additionally, you will need to set up a MySQL database.
+
+### Installation
 
 
-## 📋General Information
-- The application was created to facilitate hospital workflows and allow patients to book appointments online with multiple specialists. 
-
-
-
-## 🗃Technologies Used
-* Node.js
-* TypeScript
-* Express.js
-* MySQL
-
-
-
-
-## ⚙Features
-* As a doctor you can:
-  -  set up free appointments on which you will see patients
-* As a patient:
-    - register for an appointment
-
-## 🏁Getting started
-### Prerequisite
-- [Node LTS](https://nodejs.org/en/download/)
-- [Npm](https://docs.npmjs.com/getting-started)  or [Yarn](https://yarnpkg.com/lang/en/docs/install/)
- #### This app is running with database so if you want to clone it and try how it works you also need:
-- [XAMPP](https://www.apachefriends.org/)
-- [HeidiSQL](https://www.heidisql.com/)
-
-### Commands
-
-Open project in new folder and clone
 ```bash
-git clone https://github.com/PioR94/HospitalBack.git
+git clone https://example.com/hospital-back.git
+cd hospital-back
+npm install
 ```
-enter the project folder
-```bash
-cd HospitalBack
-````
+### Environment Configuration
 
-install dependencies
+Create a .env file in the root directory and configure the following variables:
+- SALT=your_salt
+- SECRET_KEY=your_secret_key
+- GOOGLE_API_KEY=your_google_api_key
+- STRIPE_SECRET_KEY=your_stripe_api_key
+- BASE_URL=your-data_base_url
+- DB_PASSWORD=your_password_to_data_base
+- DB_USER=user_name
+- DB_NAME=data_base_name
+
+## Instructions for Setting Up the MariaDB Database
+
+### Prerequisites
+Ensure you have MariaDB or another database management system installed on your computer that can handle SQL files.
+
+### Step 1: Downloading the SQL File
+Download the `data-base.sql` file from the main directory of this repository.
+
+### Step 2: Importing the Database
+To import the database, follow these steps:
+
+
+1. Open your database client and connect to your local MariaDB server.
+2. Use the import function to load the `database.sql` file. The import process may vary depending on the software you are using, but you can typically find an `Import` option in the file or tools menu.
+
+## Running the Application
+- To start the application in development mode, use:
 ```bash
-npm i
-````
-change db.ts file to your liking
-```sh
-├── 📁  utils
-│   ├── 📄   db.ts
+npm run start:dev
 ```
-to avoid conflicts comment pipes and also might want to change the port (default is 3001) in the `index.ts` file
-```ts
-app.listen(3001, '0.0.0.0', () => {
-    console.log('Listening on port http://localhost:3001');
-});
-```
-start the app
+- For production, first build the application:
 ```bash
-tsnd index.ts
-````
+npm run biuld
+```
+- Then start the application:
+```bash
+npm start
+```
+
+## Testing 
+Run the tests using:
+```bash
+npm test
+```
+## License
+
+This project is licensed under the MIT License.
 
