@@ -11,11 +11,9 @@ import { paymentRouter } from './routers/payment';
 
 const app = express();
 
-const baseUrl = process.env.BASE_URL;
-
 app.use(
   cors({
-    origin: baseUrl,
+    origin: process.env.BASE_URL,
   }),
 );
 app.use(json());
@@ -27,6 +25,6 @@ app.use('/specialization', specializationRouter);
 app.use('/schedule', scheduleRouter);
 app.use('/payment', paymentRouter);
 
-app.listen(3001, '0.0.0.0', () => {
+app.listen(Number(process.env.PORT), '0.0.0.0', () => {
   console.log('Listening on port http://localhost:3001');
 });

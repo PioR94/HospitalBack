@@ -43,6 +43,7 @@ doctorRouter
       res.json({ ...doctor, latitude: location.lat, longitude: location.lng });
     } catch (error) {
       console.error(error);
+
       res.status(500).send('Error geocoding address');
     }
   })
@@ -53,6 +54,10 @@ doctorRouter
 
     const doctor = await DoctorRecord.getUserLogged(data.login, hash);
 
+    if (!doctor) {
+      return res.status(401).json({ error: 'Invalid login or password' });
+    }
+
     if (doctor) {
       const token = jwt.sign({ login: doctor.login, id: doctor.id }, SECRET_KEY, { expiresIn: '1h' });
 
@@ -62,6 +67,7 @@ doctorRouter
     }
     res.end();
   })
+
   .post('/find-doctors', async (req, res) => {
     const doctors: Doctor[] = await DoctorRecord.findDoctors(req.body.city, req.body.specialization);
 
@@ -104,6 +110,7 @@ doctorRouter
     };
     res.json(dataDoctor);
   })
+
   .put('/profile-settings', async (req, res) => {
     const dataProfile = req.body;
 
