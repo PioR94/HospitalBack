@@ -49,7 +49,7 @@ describe('doctor-post-doctor/log', () => {
     const response = await request(app).post('/doctor/log').send({ login: 'wrongLogin', password: 'wrongPassword' });
 
     expect(response.statusCode).toBe(401);
-    
+
     expect(response.body).toHaveProperty('error');
   });
 });

@@ -43,6 +43,7 @@ doctorRouter
       res.json({ ...doctor, latitude: location.lat, longitude: location.lng });
     } catch (error) {
       console.error(error);
+
       res.status(500).send('Error geocoding address');
     }
   })
@@ -66,6 +67,7 @@ doctorRouter
     }
     res.end();
   })
+
   .post('/find-doctors', async (req, res) => {
     const doctors: Doctor[] = await DoctorRecord.findDoctors(req.body.city, req.body.specialization);
 
@@ -108,6 +110,7 @@ doctorRouter
     };
     res.json(dataDoctor);
   })
+
   .put('/profile-settings', async (req, res) => {
     const dataProfile = req.body;
 
